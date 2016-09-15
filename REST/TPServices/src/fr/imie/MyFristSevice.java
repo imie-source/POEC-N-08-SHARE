@@ -3,6 +3,7 @@ package fr.imie;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -11,8 +12,8 @@ import javax.ws.rs.core.Response;
  * Session Bean implementation class MyFristSevice
  */
 @Stateless
-@Path("/helloService")
-@Produces({MediaType.APPLICATION_XML})
+@Path("/helloService/{textDTO}")
+@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 public class MyFristSevice{
 
     /**
@@ -23,8 +24,9 @@ public class MyFristSevice{
     }
     
     @GET
-    public Response helloService(){
+    public Response helloService(@PathParam("textDTO") String text){
     	TestRestDTO testRestDTO =  new TestRestDTO();
+    	testRestDTO.setText(text);
     	return Response.ok(testRestDTO).build();
     }
 

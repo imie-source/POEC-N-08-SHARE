@@ -6,9 +6,12 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,9 +42,27 @@ public class UserService {
 	}
 	
 	@POST
-	public UserEntity insertUser(UserEntity entity){
+	public Response insertUser(UserEntity entity){
 		entityManager.persist(entity);
-		return(entity);
+		return Response.ok(entity).build();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public Response deleteUser(@PathParam("id") Integer id){
+
+		UserEntity userEntity = entityManager.find(UserEntity.class, id);
+		entityManager.remove(userEntity);
+		return Response.ok("done").build();
+	}
+	
+	@PUT
+	@Path("/{id}")
+	public Response updateUser(@PathParam("id") Integer id, UserEntity entityIn){
+		UserEntity userEntity = entityManager.find(UserEntity.class, id);
+		userEntity.setLogin(entityIn.getLogin());
+		userEntity.setPassw(entityIn.getPassw());
+		return Response.ok(userEntity).build();
 	}
 
 }
